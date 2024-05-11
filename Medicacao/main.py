@@ -13,23 +13,23 @@ CONTEXTO:
     E 95% DAS PESSOAS ENTRA 65 A 100 ANOS TIVERAM EFEITOS COLATERAIS
 """
 for i in range(50):
-    #5% que deu ruim
+    #5% EFEITOS COLATERAIS
     random_younger = randint(13,64)
     train_samples.append(random_younger)
     train_labels.append(1)
     
-    #5% que deu NÃO ruim
+    #5% SEM EFEITOS COLATERAIS
     random_older = randint(65,100)
     train_samples.append(random_older)
     train_labels.append(0)
     
 for i in range(1000):
-    #95% que deu NÃO ruim
+    #95% SEM EFEITOS COLATERAIS
     random_younger = randint(13,64)
     train_samples.append(random_younger)
     train_labels.append(0)
     
-    #95% que deu ruim
+    #95% EFEITOS COLATERAIS
     random_older = randint(65,100)
     train_samples.append(random_older)
     train_labels.append(1)
@@ -62,3 +62,7 @@ model = Sequential([
         Dense(units=32, activation='relu'),
         Dense(units=2, activation='softmax')
     ])
+
+model.compile(optimizer=Adam(learning_rate=0.0001), loss='sparse_categorical_crossentropy', metrics=['accuracy'])
+
+model.fit(x=scaled_train_samples, y=train_labels, batch_size=10, epochs=30, shuffle=True, verbose=2)
