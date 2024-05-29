@@ -65,4 +65,53 @@ model = Sequential([
 
 model.compile(optimizer=Adam(learning_rate=0.0001), loss='sparse_categorical_crossentropy', metrics=['accuracy'])
 
-model.fit(x=scaled_train_samples, y=train_labels, validation_split=0.3, batch_size=10, epochs=30, shuffle=True, verbose=2)
+model.fit(x=scaled_train_samples, y=train_labels, validation_split=0.3, batch_size=10, epochs=30, shuffle=True, verbose=0)
+
+#EXECUTANDO TESTES
+
+test_labels = []
+test_samples = []
+
+
+"""
+CONTEXTO:
+    TESTE FARMACÊUTIC, 5% DAS PESSOAS ENTRE 13 A 64 ANOS TIVERAM EFEITOS COLATERAIS
+    E 95% DAS PESSOAS ENTRA 65 A 100 ANOS TIVERAM EFEITOS COLATERAIS
+"""
+for i in range(10):
+    #5% EFEITOS COLATERAIS
+    random_younger = randint(13,64)
+    test_samples.append(random_younger)
+    test_labels.append(1)
+    
+    #5% SEM EFEITOS COLATERAIS
+    random_older = randint(65,100)
+    test_samples.append(random_older)
+    test_labels.append(0)
+    
+for i in range(200):
+    #95% SEM EFEITOS COLATERAIS
+    random_younger = randint(13,64)
+    test_samples.append(random_younger)
+    test_labels.append(0)
+    
+    #95% EFEITOS COLATERAIS
+    random_older = randint(65,100)
+    test_samples.append(random_older)
+    test_labels.append(1)
+    
+test_labels = np.array(test_labels)
+test_samples = np.array(test_samples)
+test_labels, test_samples = shuffle(test_labels, test_samples)
+
+scaled_test_samples = scaler.fit_transform(test_samples.reshape(-1,1))
+
+predictions = model.predict(x=scaled_test_samples, batch_size=10, verbose=0)
+
+for i in predictions:
+    print(i)
+    
+rounded_predictions = np.argmax(predictions, axis=-1)
+
+for i in rounded_predictions:
+    print(i)
